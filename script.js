@@ -105,7 +105,8 @@ const scenarios = [
       ]
     }
   ]; // ← This is the end of the scenarios array
-  
+
+
   let currentScenario = 0;
   const philosopherScores = {};
   let selectedEmoji = "";
@@ -127,51 +128,67 @@ const scenarios = [
     document.getElementById("character").textContent = selectedEmoji;
     document.getElementById("start-screen").style.display = "none";
   
-    setTimeout(() => {
-      startQuestionWithJump();
-    }, 500);
+    showScenario();
   }
   
-  function startQuestionWithJump() {
+  function showScenario() {
+    const cloud = document.getElementById("cloud");
+    cloud.style.opacity = "1";
+    cloud.style.animation = "cloudFlash 1s ease-in-out infinite";
     const character = document.getElementById("character");
     const obstacle = document.getElementById("obstacle");
     const scenarioDiv = document.getElementById("scenario");
     const choicesDiv = document.getElementById("choices");
+    const ground = document.getElementById("ground");
   
     scenarioDiv.textContent = "";
     choicesDiv.innerHTML = "";
   
-    // Create a new obstacle each time
+    // Start ground animation
+    ground.style.animationPlayState = "running";
+  
+    // Animate new obstacle
     obstacle.textContent = getRandomObstacle();
     obstacle.style.animation = "none";
-    obstacle.offsetHeight;
-    obstacle.style.animation = "moveObstacle 3.3s linear forwards";
+    void obstacle.offsetWidth;
+    obstacle.style.animation = "moveObstacle 2s linear forwards";
   
+    // Delay the jump to align with obstacle passing under the character
+    // Show cloud before jump
     setTimeout(() => {
+      character.classList.remove("jump");
+      cloud.classList.remove("jump");
+      void character.offsetWidth;
+      void cloud.offsetWidth;
       character.classList.add("jump");
-      setTimeout(() => {
-        character.classList.remove("jump");
-        setTimeout(() => {
-          const scenario = scenarios[currentScenario];
-          scenarioDiv.textContent = scenario.text;
+      cloud.classList.add("jump");
   
-          scenario.choices.forEach(choice => {
-            const btn = document.createElement("button");
-            btn.textContent = choice.text;
-            btn.onclick = () => {
-              philosopherScores[choice.philosopher] = (philosopherScores[choice.philosopher] || 0) + 1;
-              currentScenario++;
-              if (currentScenario < scenarios.length) {
-                startQuestionWithJump();
-              } else {
-                showResults();
-              }
-            };
-            choicesDiv.appendChild(btn);
-          });
-        }, 300);
-      }, 500);
+      // Stop ground animation right after the jump finishes
+      setTimeout(() => {
+        ground.style.animationPlayState = "paused";
+        cloud.style.animation = "none";
+        cloud.style.opacity = "0";
+      }, 1); // matches the jump animation duration
     }, 1000);
+  
+    // Show question and choices immediately
+    const scenario = scenarios[currentScenario];
+    scenarioDiv.textContent = scenario.text;
+  
+    scenario.choices.forEach(choice => {
+      const btn = document.createElement("button");
+      btn.textContent = choice.text;
+      btn.onclick = () => {
+        philosopherScores[choice.philosopher] = (philosopherScores[choice.philosopher] || 0) + 1;
+        currentScenario++;
+        if (currentScenario < scenarios.length) {
+          showScenario();
+        } else {
+          showResults();
+        }
+      };
+      choicesDiv.appendChild(btn);
+    });
   }
   
   function getRandomObstacle() {
@@ -219,9 +236,8 @@ const scenarios = [
     }
   
     resultsDiv.appendChild(graph);
-  }
-  
-  window.onload = () => {
-    // optional: preload something or auto-focus name input
-  };
-  
+  }  
+
+window.onload = () => {
+  // optional: preload something or auto-focus name input
+};

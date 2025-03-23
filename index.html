@@ -17,9 +17,16 @@
         <input type="text" id="username" placeholder="Your name..." /><br><br>
       
         <p>Choose your character:</p>
-        <button class="emoji-btn" onclick="selectCharacter('🚶‍♂️')">🚶‍♂️</button>
-        <button class="emoji-btn" onclick="selectCharacter('🚶‍♀️')">🚶‍♀️</button>
-      
+        <div style="display: flex; justify-content: center; gap: 40px;">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="emoji-btn" onclick="selectCharacter('🏃🏼‍♂️')">🏃🏼‍♂️</button>
+                <button class="emoji-btn" onclick="selectCharacter('🏃🏼‍♀️')">🏃🏼‍♀️</button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <button class="emoji-btn" onclick="selectCharacter('🏃🏿‍♂️')">🏃🏿‍♂️</button>
+              <button class="emoji-btn" onclick="selectCharacter('🏃🏿‍♀️')">🏃🏿‍♀️</button>
+            </div>
+          </div>
         <div id="selected-character" style="margin: 10px;font-size:1.5rem"></div>
       
         <button id="start-btn" onclick="startQuiz()" disabled>Start</button>
@@ -28,10 +35,11 @@
       <!-- CHARACTER ANIMATION -->
       <div id="game-container">
         <div id="ground"></div>
+        <div id="cloud">💨</div>
         <div id="character">🚶‍♂️</div>
         <div id="obstacle">🪵</div>
       </div>
-      
+          
       
     <!-- QUESTIONS -->
     <div id="scenario"></div>
