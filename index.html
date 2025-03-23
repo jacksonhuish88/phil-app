@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Philosopher's Dilemma</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app">
+    <h1>Philosopher's Dilemma</h1>
+
+      <!-- START SCREEN -->
+    <div id="start-screen">
+        <h1>Welcome to Philosopher's Dilemma</h1>
+        <label for="username">Enter your name:</label><br>
+        <input type="text" id="username" placeholder="Your name..." /><br><br>
+      
+        <p>Choose your character:</p>
+        <button class="emoji-btn" onclick="selectCharacter('🚶‍♂️')">🚶‍♂️</button>
+        <button class="emoji-btn" onclick="selectCharacter('🚶‍♀️')">🚶‍♀️</button>
+      
+        <div id="selected-character" style="margin: 10px;font-size:1.5rem"></div>
+      
+        <button id="start-btn" onclick="startQuiz()" disabled>Start</button>
+      </div>
+      
+      <!-- CHARACTER ANIMATION -->
+      <div id="game-container">
+        <div id="ground"></div>
+        <div id="character">🚶‍♂️</div>
+        <div id="obstacle">🪵</div>
+      </div>
+      
+      
+    <!-- QUESTIONS -->
+    <div id="scenario"></div>
+    <div id="choices"></div>
+    <div id="results"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

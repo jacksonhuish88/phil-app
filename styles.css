@@ -1,0 +1,197 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #0a1a40 !important; /* Deep blue background */
+    color: white;              /* White text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  #app {
+    text-align: center;
+    max-width: 700px;
+  }
+
+  #start-screen {
+    text-align: center;
+    padding: 40px 20px; /* Padding around the start screen */
+    background-color: #0a1a40;
+    color: white;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  #username {
+    width: 200px;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    text-align: center;
+    background-color: white;
+    color: 1f4fff;
+  }
+  
+  .emoji-btn {
+    font-size: 2rem;
+    margin: 10px 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background: #1f4fff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    width: 200px;
+    transition: background 0.2s ease-in-out;
+  }
+  
+  .emoji-btn:hover {
+    background: #3f6cff;
+  }
+  
+  #start-btn {
+    margin-top: 20px;
+    padding: 10px 30px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #5bc0be;
+    color: white;
+    cursor: pointer;
+    width: 200px;
+  }
+  
+  #start-btn:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+  }
+  
+  .selected-character {
+    font-size:25px
+  }
+  
+  #game-container {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    height: 150px;
+    background-color: #0a1a40;
+    overflow: hidden;
+    margin-bottom: 30px;
+    border-bottom: 4px solid white;
+  }
+  
+  #ground {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 10px;
+    background-color: #fff;
+  }
+  
+  #character {
+    position: absolute;
+    bottom: 10px;
+    left: 50px;
+    font-size: 2rem;
+    transition: bottom 0.3s ease;
+    transform: scaleX(-1); /* This mirrors the character */
+  }
+  
+  #obstacle {
+    position: absolute;
+    bottom: 10px;
+    right: -50px;
+    font-size: 2rem;
+    animation: moveObstacle 2s linear forwards;
+    z-index: 1;
+  }
+  
+  
+  @keyframes moveObstacle {
+    from {
+      right: -50px;
+    }
+    to {
+      right: 700px;
+    }
+  }
+  
+  .jump {
+    bottom: 70px !important; /* how high the jump goes */
+  }
+  
+  #scenario {
+    margin-bottom: 30px; /* or try 40px for more space */
+    font-size: 1.2rem;
+  }
+  
+  #choices {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* spacing between buttons */
+  }
+  
+  button {
+    background: #1f4fff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    max-width: 400px;
+    transition: background 0.2s ease-in-out;
+  }
+  
+  button:hover {
+    background: #3f6cff;
+  }
+  .vertical-graph {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+    height: 350px;
+    margin-top: 30px;
+  }
+  
+  .bar-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60px;
+  }
+  
+  .bar-percent {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .bar-vertical {
+    width: 100%;
+    background-color: #5bc0be;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.8s ease;
+  }
+  
+  .bar-label-vertical {
+    margin-top: 8px;
+    font-size: 0.8rem;
+    text-align: center;
+    color: white;
+  }
+  
