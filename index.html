@@ -4,49 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Philosopher's Dilemma</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    #scale-options button {
+      white-space: normal;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      padding: 10px;
+      font-size: 0.85rem;
+    }
+  </style>
 </head>
 <body>
   <div id="app">
     <h1>Philosopher's Dilemma</h1>
 
-      <!-- START SCREEN -->
+    <!-- START SCREEN -->
     <div id="start-screen">
-        <h1>Welcome to Philosopher's Dilemma</h1>
-        <label for="username">Enter your name:</label><br>
-        <input type="text" id="username" placeholder="Your name..." /><br><br>
-      
-        <p>Choose your character:</p>
-        <div style="display: flex; justify-content: center; gap: 40px;">
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button class="emoji-btn" onclick="selectCharacter('🏃🏼‍♂️')">🏃🏼‍♂️</button>
-                <button class="emoji-btn" onclick="selectCharacter('🏃🏼‍♀️')">🏃🏼‍♀️</button>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-              <button class="emoji-btn" onclick="selectCharacter('🏃🏿‍♂️')">🏃🏿‍♂️</button>
-              <button class="emoji-btn" onclick="selectCharacter('🏃🏿‍♀️')">🏃🏿‍♀️</button>
-            </div>
-          </div>
-        <div id="selected-character" style="margin: 10px;font-size:1.5rem"></div>
-      
-        <button id="start-btn" onclick="startQuiz()" disabled>Start</button>
-      </div>
-      
-      <!-- CHARACTER ANIMATION -->
-      <div id="game-container">
-        <div id="ground"></div>
-        <div id="cloud">💨</div>
-        <div id="character">🚶‍♂️</div>
-        <div id="obstacle">🪵</div>
-      </div> 
-          
-      
-    <!-- QUESTIONS -->
-    <div id="scenario"></div>
-    <div id="choices"></div>
-    <div id="results"></div>
-  </div>
+      <h1>Welcome to Philosopher's Dilemma</h1>
+      <label for="username">Enter your name:</label><br>
+      <input type="text" id="username" placeholder="Your name..." /><br><br>
+      <button id="start-btn" onclick="startQuiz()">Start</button>
+    </div>
 
-  <script src="script.js"></script>
+    <!-- QUESTION SECTION -->
+    <div id="quiz-container" style="display: none;">
+      <div id="question-counter"></div>
+      <div id="professor-box">
+        <img id="professor-img" src="professor.png" alt="Professor" />
+        <p id="typed-question"></p>
+      </div>
+      <div id="scale-options" style="color:black">
+        <button onclick="submitResponse(-2)">Strongly Disagree</button>
+        <button onclick="submitResponse(-1)">Disagree</button>
+        <button onclick="submitResponse(0)">Neutral</button>
+        <button onclick="submitResponse(1)">Agree</button>
+        <button onclick="submitResponse(2)">Strongly Agree</button>
+      </div>
+    </div>
+
+    <div id="results" style="display: none;"></div>
+  </div>
+<script src="script.js"></script>
 </body>
 </html>
