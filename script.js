@@ -1,15 +1,86 @@
 const scenarios = [
-  { text: "It's okay to break a promise if it helps more people than it hurts.", tags: { utilitarianism: 1, deontology: -1, virtue: 0 } },
-  { text: "Lying is wrong, even if it prevents someone from being hurt.", tags: { utilitarianism: -1, deontology: 2, virtue: 0 } },
-  { text: "A good person should act based on the kind of character they want to have.", tags: { utilitarianism: 0, deontology: 0, virtue: 2 } },
-  { text: "The morality of an action depends solely on its consequences.", tags: { utilitarianism: 2, deontology: -2, virtue: 0 } },
-  { text: "You should follow moral rules even if breaking them would lead to better outcomes.", tags: { utilitarianism: -2, deontology: 2, virtue: 0 } },
-  { text: "Virtue comes from consistently practicing good habits and decisions.", tags: { utilitarianism: 0, deontology: 0, virtue: 2 } },
-  { text: "An action is right if it leads to the greatest happiness for the greatest number.", tags: { utilitarianism: 2, deontology: -1, virtue: 0 } },
-  { text: "Doing the right thing means fulfilling your duty, regardless of outcome.", tags: { utilitarianism: -1, deontology: 2, virtue: 0 } },
-  { text: "Ethics should focus more on personal growth than on abstract rules or outcomes.", tags: { utilitarianism: 0, deontology: -1, virtue: 2 } },
-  { text: "If sacrificing one person saves five others, it is the right thing to do.", tags: { utilitarianism: 2, deontology: -2, virtue: 0 } }
+  {
+    text: "You're hiding a refugee from a government that plans to torture them. The police ask if you're hiding anyone. Is it morally acceptable to lie?",
+    tags: {
+      utilitarianism: 2,    // Lying saves a life — ends justify means
+      deontology: -2,       // Lying violates a moral duty regardless of outcome
+      virtue: 1             // Compassion/courage aligns with virtuous character
+    }
+  },
+  {
+    text: "A hospital has 5 patients needing organ transplants. A healthy traveler with compatible organs walks in. Should the doctors sacrifice him to save the 5?",
+    tags: {
+      utilitarianism: 2,    // Maximizes overall lives saved
+      deontology: -2,       // Killing an innocent violates moral law
+      virtue: -1            // Lacks integrity, compassion, and justice
+    }
+  },
+  {
+    text: "You promised a dying friend you'd never reveal their secret. Years later, the secret could exonerate someone on death row. Should you break the promise?",
+    tags: {
+      utilitarianism: 1,    // Saves a life — overall good
+      deontology: -2,       // Breaking a solemn promise violates duty
+      virtue: 1             // Justice and truthfulness toward the innocent
+    }
+  },
+  {
+    text: "You're offered money to fake clinical trial data that could speed up approval of a drug that might help millions. Is it ethical to do so?",
+    tags: {
+      utilitarianism: 2,    // Potential to benefit many lives
+      deontology: -2,       // Lying/fraud is inherently wrong
+      virtue: -2            // Dishonest, corrupt character action
+    }
+  },
+  {
+    text: "During war, you're ordered to execute a civilian to intimidate others and prevent a larger uprising. Is obedience to duty ever moral here?",
+    tags: {
+      utilitarianism: -1,   // Likely causes more harm/fear/hatred long-term
+      deontology: 2,        // A strict deontologist might obey orders/law/duty
+      virtue: -1            // Cowardly, unjust — fails virtue ethics
+    }
+  },
+  {
+    text: "A friend cheats on their partner, who is also your friend. Telling the truth will destroy both friendships. Do you say nothing?",
+    tags: {
+      utilitarianism: 1,    // May preserve happiness/peace
+      deontology: -1,       // You have a duty to tell the truth
+      virtue: -1            // Avoiding truth lacks integrity/courage
+    }
+  },
+  {
+    text: "To win an election that could create massive social change, you fabricate parts of your opponent's record. The lie may benefit millions. Justified?",
+    tags: {
+      utilitarianism: 2,    // Consequences are highly beneficial
+      deontology: -2,       // Dishonesty = wrong regardless of good result
+      virtue: -2            // Lacks moral character — deceit, manipulation
+    }
+  },
+  {
+    text: "A violent criminal is about to be released on a technicality. You have the power to plant false evidence to keep them imprisoned. Do you do it?",
+    tags: {
+      utilitarianism: 1,    // May protect society
+      deontology: -2,       // Framing someone is never morally acceptable
+      virtue: -1            // Dishonest and unjust action
+    }
+  },
+  {
+    text: "You discover your company is dumping toxic waste, but exposing it would cost thousands of workers their jobs. Do you blow the whistle?",
+    tags: {
+      utilitarianism: 1,    // Helps environment, prevents long-term harm
+      deontology: 2,        // Fulfills duty to truth, justice, and protection
+      virtue: 1             // Demonstrates courage and integrity
+    }
+  },
+  {
+    text: "A terrorist threatens to kill hostages unless you torture their child for information. The child is innocent. Do you torture the child?",
+    tags: {
+      utilitarianism: 2,    // May save many lives
+      deontology: -3,       // Torturing an innocent is deeply immoral
+      virtue: -3            // Violates compassion, courage, humanity
+    }
+  }
 ];
+
 
 let currentIndex = 0;
 let scores = { utilitarianism: 0, deontology: 0, virtue: 0 };
@@ -77,14 +148,29 @@ function showResults() {
     },
     options: {
       scales: {
-        y: {
-          beginAtZero: true
-        }
+        y: { beginAtZero: true }
       }
     }
   });
+
   sorted.forEach(([key, value]) => {
     results.innerHTML += `<p><strong>${key.toUpperCase()}:</strong> ${value}</p>`;
+  });
+}
+
+function addHoverImageListeners() {
+  const img = document.getElementById("professor-img");
+  const buttons = document.querySelectorAll("#scale-options button");
+
+  buttons.forEach((btn, index) => {
+    btn.addEventListener("mouseenter", () => {
+      if (index === 0 || index === 1) img.src = "worried.png";
+      else if (index === 2) img.src = "neutral.png";
+      else if (index === 3 || index === 4) img.src = "excited.png";
+    });
+    btn.addEventListener("mouseleave", () => {
+      img.src = "professor.png";
+    });
   });
 }
 
@@ -94,4 +180,6 @@ window.onload = () => {
   const chartScript = document.createElement('script');
   chartScript.src = "https://cdn.jsdelivr.net/npm/chart.js";
   document.head.appendChild(chartScript);
+
+  addHoverImageListeners();
 };
