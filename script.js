@@ -48,14 +48,6 @@ const scenarios = [
     }
   },
   {
-    text: "To win an election that could create massive social change, you fabricate parts of your opponent's record. The lie may benefit millions. Justified?",
-    tags: {
-      utilitarianism: 2,    // Consequences are highly beneficial
-      deontology: -2,       // Dishonesty = wrong regardless of good result
-      virtue: -2            // Lacks moral character — deceit, manipulation
-    }
-  },
-  {
     text: "A violent criminal is about to be released on a technicality. You have the power to plant false evidence to keep them imprisoned. Do you do it?",
     tags: {
       utilitarianism: 1,    // May protect society
@@ -63,22 +55,9 @@ const scenarios = [
       virtue: -1            // Dishonest and unjust action
     }
   },
-  {
-    text: "You discover your company is dumping toxic waste, but exposing it would cost thousands of workers their jobs. Do you blow the whistle?",
-    tags: {
-      utilitarianism: 1,    // Helps environment, prevents long-term harm
-      deontology: 2,        // Fulfills duty to truth, justice, and protection
-      virtue: 1             // Demonstrates courage and integrity
-    }
-  },
-  {
-    text: "A terrorist threatens to kill hostages unless you torture their child for information. The child is innocent. Do you torture the child?",
-    tags: {
-      utilitarianism: 2,    // May save many lives
-      deontology: -3,       // Torturing an innocent is deeply immoral
-      virtue: -3            // Violates compassion, courage, humanity
-    }
-  }
+  { text: "Withholding a terminal diagnosis from a patient to preserve their mental well-being is the right choice.", tags: { utilitarianism: 1, deontology: -1, virtue: 0 } },
+  { text: "A soldier disobeys an order to kill civilians, even though doing so would demoralize the enemy and save his unit.", tags: { utilitarianism: -1, deontology: 2, virtue: 1 } },
+  { text: "If someone consents to euthanasia, it is morally acceptable to end their life to relieve their suffering.", tags: { utilitarianism: 2, deontology: -1, virtue: 0 } },
 ];
 
 
