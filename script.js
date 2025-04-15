@@ -184,4 +184,17 @@ function addHoverImageListeners() {
 window.onload = () => {
   document.getElementById("username").focus();
   addHoverImageListeners();
+  typeIntro("Welcome to the Philosopher's Dilemma. In this experiment, you'll face a series of ethical situations. Your choices will reveal which philosophical school of thought—Utilitarianism, Deontology, or Virtue Ethics—you lean toward.");
 };
+
+function typeIntro(text) {
+  const introText = document.getElementById("intro-text");
+  if (!introText) return;
+  introText.textContent = "";
+  let i = 0;
+  const interval = setInterval(() => {
+    introText.textContent += text[i];
+    i++;
+    if (i >= text.length) clearInterval(interval);
+  }, 40);
+}
