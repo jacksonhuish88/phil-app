@@ -111,13 +111,13 @@ function showResults() {
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   results.innerHTML = `<h2 style='margin-bottom: 50px;'>${username}, Your Ethical Alignment:</h2>`;
 
-  const totalSum = Object.values(scores).reduce((a, b) => a + Math.max(0, b), 0);
+  const totalSum = Object.values(scores).reduce((a, b) => a + Math.abs(b), 0);
 const graph = document.createElement("div");
 graph.classList.add("vertical-graph");
 graph.style.paddingBottom = "40px";
 
 for (const [label, score] of Object.entries(scores)) {
-  const adjusted = Math.max(0, score);
+  const adjusted = Math.abs(score);
   const percentage = ((adjusted / totalSum) * 100).toFixed(1);
   const scaledHeight = (adjusted / totalSum) * 300;
 
