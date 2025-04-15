@@ -132,9 +132,25 @@ function addHoverImageListeners() {
 
   buttons.forEach((btn, index) => {
     btn.addEventListener("mouseenter", () => {
-      if (index === 0 || index === 1) img.src = "worried.png";
-      else if (index === 2) img.src = "neutral.png";
-      else if (index === 3 || index === 4) img.src = "excited.png";
+      switch (index) {
+        case 0:
+          img.src = "professor-strongly-disagree.png";
+          break;
+        case 1:
+          img.src = "professor-disagree.png";
+          break;
+        case 2:
+          img.src = "professor-neutral.png";
+          break;
+        case 3:
+          img.src = "professor-agree.png";
+          break;
+        case 4:
+          img.src = "professor-strongly-agree.png";
+          break;
+        default:
+          img.src = "professor.png";
+      }
     });
     btn.addEventListener("mouseleave", () => {
       img.src = "professor.png";
