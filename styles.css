@@ -151,3 +151,39 @@ body {
   font-size: 1.1rem;
   margin: 8px 0;
 }
+.vertical-graph {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 20px;
+  margin-top: 30px;
+  height: 300px;
+}
+
+.bar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80px;
+}
+
+.bar-vertical {
+  width: 40px;
+  background-color: #5bc0be;
+  transition: height 0.4s ease-in-out;
+  border-radius: 4px;
+}
+
+.bar-percent {
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: #fff;
+}
+
+.bar-label-vertical {
+  font-size: 0.9rem;
+  margin-top: 8px;
+  text-align: center;
+  color: #ccc;
+  word-break: break-word;
+}

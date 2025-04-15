@@ -1,35 +1,54 @@
 const scenarios = [
+  // Agree (utilitarian: lie to prevent suffering), Disagree (deontology: lying is always wrong), Neutral (virtue: depends on compassion vs honesty)
   {
     text: "You're hiding a refugee from a government that plans to torture them. The police ask if you're hiding anyone. Is it morally acceptable to lie?",
     tags: { utilitarianism: 2, deontology: -2, virtue: 1 }
   },
+  // Agree (utilitarian: maximize lives saved), Disagree (deontology: don't kill innocents), Neutral (virtue: conflicted, lacks integrity)
   {
     text: "A hospital has 5 patients needing organ transplants. A healthy traveler with compatible organs walks in. Should the doctors sacrifice him to save the 5?",
     tags: { utilitarianism: 2, deontology: -2, virtue: -1 }
   },
+  // Agree (utilitarian: save a life), Disagree (deontology: uphold promise), Neutral (virtue: truth and justice align)
   {
     text: "You promised a dying friend you'd never reveal their secret. Years later, the secret could exonerate someone on death row. Should you break the promise?",
     tags: { utilitarianism: 1, deontology: -2, virtue: 1 }
   },
+  // Agree (utilitarian: drug helps millions), Disagree (deontology: fraud is wrong), Neutral (virtue: unethical action)
   {
     text: "You're offered money to fake clinical trial data that could speed up approval of a drug that might help millions. Is it ethical to do so?",
     tags: { utilitarianism: 2, deontology: -2, virtue: -2 }
   },
+  // Agree (deontology: obey lawful order), Disagree (utilitarian: long-term harm), Neutral (virtue: unjust and cowardly)
   {
     text: "During war, you're ordered to execute a civilian to intimidate others and prevent a larger uprising. Is obedience to duty ever moral here?",
     tags: { utilitarianism: -1, deontology: 2, virtue: -1 }
   },
+  // Agree (utilitarian: avoid harm to relationships), Disagree (deontology: tell truth), Neutral (virtue: lacks courage and integrity)
   {
     text: "A friend cheats on their partner, who is also your friend. Telling the truth will destroy both friendships. Do you say nothing?",
     tags: { utilitarianism: 1, deontology: -1, virtue: -1 }
   },
+  // Agree (utilitarian: protect society), Disagree (deontology: planting evidence is wrong), Neutral (virtue: unjust, dishonest)
   {
     text: "A violent criminal is about to be released on a technicality. You have the power to plant false evidence to keep them imprisoned. Do you do it?",
     tags: { utilitarianism: 1, deontology: -2, virtue: -1 }
   },
-  { text: "Withholding a terminal diagnosis from a patient to preserve their mental well-being is the right choice.", tags: { utilitarianism: 1, deontology: -1, virtue: 0 } },
-  { text: "A soldier disobeys an order to kill civilians, even though doing so would demoralize the enemy and save his unit.", tags: { utilitarianism: -1, deontology: 2, virtue: 1 } },
-  { text: "If someone consents to euthanasia, it is morally acceptable to end their life to relieve their suffering.", tags: { utilitarianism: 2, deontology: -1, virtue: 0 } },
+  // Agree (utilitarian: minimize suffering), Disagree (deontology: right to know truth), Neutral (virtue: intention vs honesty)
+  {
+    text: "Withholding a terminal diagnosis from a patient to preserve their mental well-being is the right choice.",
+    tags: { utilitarianism: 1, deontology: -1, virtue: 0 }
+  },
+  // Agree (deontology: duty to disobey unjust order), Disagree (utilitarian: sacrifice civilians to save unit), Neutral (virtue: brave, just)
+  {
+    text: "A soldier disobeys an order to kill civilians, even though doing so would demoralize the enemy and save his unit.",
+    tags: { utilitarianism: -1, deontology: 2, virtue: 1 }
+  },
+  // Agree (utilitarian: reduce suffering), Disagree (deontology: killing is wrong), Neutral (virtue: may value autonomy)
+  {
+    text: "If someone consents to euthanasia, it is morally acceptable to end their life to relieve their suffering.",
+    tags: { utilitarianism: 2, deontology: -1, virtue: 0 }
+  }
 ];
 
 let currentIndex = 0;
@@ -62,11 +81,20 @@ function typeQuestion(text) {
   }, 40);
 }
 
-function submitResponse(value) {
+function submitResponse(valueIndex) {
+  const valueMatrix = [
+    { u: -2, d: 2, v: -1 },  // Strongly Disagree
+    { u: -1, d: 1, v: -0.5 },
+    { u: 0,  d: 0, v: 0 },    // Neutral
+    { u: 1,  d: -1, v: 0.5 },
+    { u: 2,  d: -2, v: 1 }    // Strongly Agree
+  ];
+
+  const weights = valueMatrix[valueIndex];
   const tags = scenarios[currentIndex].tags;
-  for (const theory in tags) {
-    scores[theory] += value * tags[theory];
-  }
+  scores.utilitarianism += weights.u * tags.utilitarianism;
+  scores.deontology     += weights.d * tags.deontology;
+  scores.virtue         += weights.v * tags.virtue;
   currentIndex++;
   if (currentIndex < scenarios.length) {
     typeQuestion(scenarios[currentIndex].text);
@@ -81,49 +109,44 @@ function showResults() {
   results.style.display = "block";
 
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-  results.innerHTML = `<h2>${username}, Your Ethical Alignment:</h2>`;
+  results.innerHTML = `<h2 style='margin-bottom: 50px;'>${username}, Your Ethical Alignment:</h2>`;
 
-  const canvas = document.createElement('canvas');
-  canvas.id = 'resultsChart';
-  canvas.width = 400;
-  canvas.height = 200;
-  canvas.style.maxWidth = '100%';
-  canvas.style.maxHeight = '300px';
-  canvas.style.marginTop = '20px';
-  results.appendChild(canvas);
+  const totalSum = Object.values(scores).reduce((a, b) => a + Math.max(0, b), 0);
+const graph = document.createElement("div");
+graph.classList.add("vertical-graph");
+graph.style.paddingBottom = "40px";
 
-  window.renderChart = () => {
-    new Chart(canvas, {
-      type: 'bar',
-      data: {
-        labels: Object.keys(scores).map(k => k.charAt(0).toUpperCase() + k.slice(1)),
-        datasets: [{
-          label: 'Score',
-          data: Object.values(scores),
-          backgroundColor: [
-            'rgba(75, 192, 192, 0.6)',
-            'rgba(255, 159, 64, 0.6)',
-            'rgba(153, 102, 255, 0.6)'
-          ],
-          borderColor: [
-            'rgba(75, 192, 192, 1)',
-            'rgba(255, 159, 64, 1)',
-            'rgba(153, 102, 255, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: { beginAtZero: true }
-        }
-      }
-    });
-  };
+for (const [label, score] of Object.entries(scores)) {
+  const adjusted = Math.max(0, score);
+  const percentage = ((adjusted / totalSum) * 100).toFixed(1);
+  const scaledHeight = (adjusted / totalSum) * 300;
 
-  sorted.forEach(([key, value]) => {
-    results.innerHTML += `<p><strong>${key.toUpperCase()}:</strong> ${value}</p>`;
-  });
+    const column = document.createElement("div");
+    column.classList.add("bar-column");
+
+    const percentageLabel = document.createElement("div");
+    percentageLabel.classList.add("bar-percent");
+    percentageLabel.textContent = `${percentage}%`;
+
+    const bar = document.createElement("div");
+    bar.classList.add("bar-vertical");
+    bar.style.height = `${scaledHeight}px`;
+
+    const labelEl = document.createElement("div");
+    labelEl.classList.add("bar-label-vertical");
+    labelEl.style.width = "100px";
+    labelEl.style.whiteSpace = "normal";
+    labelEl.textContent = label.charAt(0).toUpperCase() + label.slice(1);
+
+    column.appendChild(percentageLabel);
+    column.appendChild(bar);
+    column.appendChild(labelEl);
+    graph.appendChild(column);
+  }
+
+  results.appendChild(graph);
+
+  
 }
 
 function addHoverImageListeners() {
@@ -161,13 +184,4 @@ function addHoverImageListeners() {
 window.onload = () => {
   document.getElementById("username").focus();
   addHoverImageListeners();
-
-  const chartScript = document.createElement('script');
-  chartScript.src = "https://cdn.jsdelivr.net/npm/chart.js";
-  chartScript.onload = () => {
-    console.log("Chart.js loaded successfully.");
-    if (typeof renderChart === 'function') renderChart();
-  };
-  chartScript.onerror = () => alert("Chart.js failed to load. Make sure you're connected to the internet.");
-  document.head.appendChild(chartScript);
 };
