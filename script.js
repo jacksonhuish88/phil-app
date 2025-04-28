@@ -47,7 +47,39 @@ const scenarios = [
   // Agree (utilitarian: reduce suffering), Disagree (deontology: killing is wrong), Neutral (virtue: may value autonomy)
   {
     text: "If someone consents to euthanasia, it is morally acceptable to end their life to relieve their suffering.",
-    tags: { utilitarianism: 2, deontology: -1, virtue: 0 }
+    tags: { utilitarianism: 2, deontology: -1, virtue: 0 },
+  },
+
+  // Agree (utilitarian: prevent suffering by euthanasia), Disagree (deontology: killing is inherently wrong), Neutral (virtue: compassion vs respect for life)
+  { text: "A terminally ill patient you know is suffering unbearably and begs for help to end their life. Helping them would spare their pain. Assisting them would be morally acceptable.", tags: { utilitarianism: 2, deontology: -2, virtue: 1 } },
+  
+  // Agree (utilitarian: save future lives with data), Disagree (deontology: respect consent), Neutral (virtue: curiosity vs respect)
+  { text: "Scientists want to study the brains of deceased prisoners to better understand mental illness. The prisoners never gave permission, but the research could save future lives. It would be morally acceptable to proceed without consent.", 
+    tags: { utilitarianism: 1, deontology: -2, virtue: -1 } },
+  
+  // Agree (utilitarian: ensure survival of group), Disagree (deontology: betrayal is wrong), Neutral (virtue: loyalty vs wisdom)
+  { text: "Your group is stranded in the wilderness, and one injured member is slowing you down. Without leaving them behind, everyone may die. It would be morally acceptable to abandon them to save the others.", 
+    tags: { utilitarianism: 2, deontology: -2, virtue: -1 } },
+  
+  // Agree (utilitarian: promote best leader), Disagree (deontology: election fraud is wrong), Neutral (virtue: corrupts integrity)
+  { text: "A corrupt politician is leading in the polls, and the only way to ensure a good leader wins is to tamper with the election. Doing so would bring better outcomes for everyone. Interfering with the election would be morally acceptable.", 
+    tags: { utilitarianism: 2, deontology: -2, virtue: -2 } },
+  
+  // Agree (deontology: parental promise matters), Disagree (utilitarian: child benefits elsewhere), Neutral (virtue: depends on trust vs opportunity)
+  { text: "You promised your child you would attend their school play, but a major work opportunity comes up the same day. Breaking the promise would help your career. You should still keep your promise no matter the cost.", 
+    tags: { utilitarianism: -1, deontology: 2, virtue: 1 } },
+  
+  // Agree (utilitarian: society benefits from surveillance), Disagree (deontology: privacy rights are sacred), Neutral (virtue: security vs freedom)
+  { text: "The government can secretly monitor everyone’s messages to catch terrorists before they act. No one would know, and lives could be saved. Mass surveillance is morally acceptable in this case.", 
+    tags: { utilitarianism: 1, deontology: -2, virtue: -1 } },
+  
+  // Agree (utilitarian: prevent emotional harm), Disagree (deontology: honesty required), Neutral (virtue: compassion vs courage)
+  { text: "A close friend pours their heart into a project you know is terrible. Telling the truth would crush them. It is morally acceptable to lie to protect their feelings.", 
+    tags: { utilitarianism: 1, deontology: -2, virtue: 1 } },
+  
+  // Agree (utilitarian: prevent violent revolt), Disagree (deontology: censorship is wrong), Neutral (virtue: stability vs truth)
+  { text: "You uncover a government scandal that, if revealed, would likely spark riots and deaths. Staying silent would protect the public. It is morally acceptable to withhold the story for the sake of peace.", 
+    tags: { utilitarianism: 1, deontology: -2, virtue: -1 } 
   }
 ];
 
@@ -83,18 +115,18 @@ function typeQuestion(text) {
 
 function submitResponse(valueIndex) {
   const valueMatrix = [
-    { u: -2, d: 2, v: -1 },  // Strongly Disagree
+    { u: -2, d: 2, v: -1 }, // Strongly Disagree
     { u: -1, d: 1, v: -0.5 },
-    { u: 0,  d: 0, v: 0 },    // Neutral
-    { u: 1,  d: -1, v: 0.5 },
-    { u: 2,  d: -2, v: 1 }    // Strongly Agree
+    { u: 0, d: 0, v: 0 },   // Neutral
+    { u: 1, d: -1, v: 0.5 },
+    { u: 2, d: -2, v: 1 }   // Strongly Agree
   ];
 
   const weights = valueMatrix[valueIndex];
   const tags = scenarios[currentIndex].tags;
   scores.utilitarianism += weights.u * tags.utilitarianism;
-  scores.deontology     += weights.d * tags.deontology;
-  scores.virtue         += weights.v * tags.virtue;
+  scores.deontology += weights.d * tags.deontology;
+  scores.virtue += weights.v * tags.virtue;
   currentIndex++;
   if (currentIndex < scenarios.length) {
     typeQuestion(scenarios[currentIndex].text);
@@ -112,14 +144,14 @@ function showResults() {
   results.innerHTML = `<h2 style='margin-bottom: 50px;'>${username}, Your Ethical Alignment:</h2>`;
 
   const totalSum = Object.values(scores).reduce((a, b) => a + Math.abs(b), 0);
-const graph = document.createElement("div");
-graph.classList.add("vertical-graph");
-graph.style.paddingBottom = "40px";
+  const graph = document.createElement("div");
+  graph.classList.add("vertical-graph");
+  graph.style.paddingBottom = "40px";
 
-for (const [label, score] of Object.entries(scores)) {
-  const adjusted = Math.abs(score);
-  const percentage = ((adjusted / totalSum) * 100).toFixed(1);
-  const scaledHeight = (adjusted / totalSum) * 300;
+  for (const [label, score] of Object.entries(scores)) {
+    const adjusted = Math.abs(score);
+    const percentage = ((adjusted / totalSum) * 100).toFixed(1);
+    const scaledHeight = (adjusted / totalSum) * 300;
 
     const column = document.createElement("div");
     column.classList.add("bar-column");
@@ -134,10 +166,13 @@ for (const [label, score] of Object.entries(scores)) {
 
     const labelEl = document.createElement("div");
     labelEl.classList.add("bar-label-vertical");
-    labelEl.style.width = "100px";
+    labelEl.style.width = "130px";        // ⭐️ wider
     labelEl.style.whiteSpace = "normal";
+    labelEl.style.fontSize = "14px";       // ⭐️ slightly smaller
+    labelEl.style.textAlign = "center";    // ⭐️ center it
     labelEl.textContent = label.charAt(0).toUpperCase() + label.slice(1);
-
+    labelEl.setAttribute("data-philosophy", label.toLowerCase());
+    
     column.appendChild(percentageLabel);
     column.appendChild(bar);
     column.appendChild(labelEl);
@@ -146,7 +181,52 @@ for (const [label, score] of Object.entries(scores)) {
 
   results.appendChild(graph);
 
-  
+  // Create Popup
+  const popup = document.createElement("div");
+  popup.id = "philosophy-popup";
+  popup.style.display = "none";
+  popup.style.position = "absolute";
+  popup.style.background = "white";
+  popup.style.border = "1px solid black";
+  popup.style.padding = "10px";
+  popup.style.borderRadius = "8px";
+  popup.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
+  popup.style.maxWidth = "300px";
+  popup.style.fontSize = "14px";
+  popup.style.textAlign = "center";
+  popup.style.zIndex = "1000";
+  popup.style.textAlign = "center";
+  popup.style.color = "black";
+  document.body.appendChild(popup);
+
+  // Add Hover Listeners
+  const labels = document.querySelectorAll(".bar-label-vertical");
+  labels.forEach(label => {
+    label.addEventListener("mouseenter", (e) => {
+      const philosophy = e.target.dataset.philosophy;
+      popup.textContent = getPhilosophyDescription(philosophy);
+      const rect = e.target.getBoundingClientRect();
+      popup.style.top = `${rect.bottom + window.scrollY + 10}px`;
+      popup.style.left = `${rect.left + window.scrollX - 50}px`;
+      popup.style.display = "block";
+    });
+    label.addEventListener("mouseleave", () => {
+      popup.style.display = "none";
+    });
+  });
+}
+
+function getPhilosophyDescription(name) {
+  switch (name) {
+    case "utilitarianism":
+      return "Utilitarianism: Actions are right if they maximize happiness for the greatest number. (Bentham, Mill)";
+    case "deontology":
+      return "Deontology: Morality is based on duties and rules, not consequences. (Kant)";
+    case "virtue":
+      return "Virtue Ethics: Morality focuses on character traits like honesty and courage. (Aristotle)";
+    default:
+      return "";
+  }
 }
 
 function addHoverImageListeners() {
@@ -171,8 +251,6 @@ function addHoverImageListeners() {
         case 4:
           img.src = "professor-strongly-agree.png";
           break;
-        default:
-          img.src = "professor.png";
       }
     });
     btn.addEventListener("mouseleave", () => {
